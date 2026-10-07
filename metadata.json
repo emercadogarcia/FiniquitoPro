@@ -1,0 +1,6 @@
+{
+  "name": "Finiquito Bolivia - Calculadora Laboral y Emisión Oficial",
+  "description": "Calculadora laboral de alta precisión y generador de Finiquitos oficiales del Ministerio de Trabajo de Bolivia conforme a la LGT, D.S. 224, D.S. 110, D.S. 522 y D.S. 28699 con exportación en PDF oficial y Markdown.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
