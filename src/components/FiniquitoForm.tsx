@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calculator, Sparkles, Calendar, RotateCcw } from 'lucide-react';
+import { Calculator, RotateCcw, Calendar, HelpCircle } from 'lucide-react';
 import { FiniquitoParams, MotivoRetiro } from '../types/finiquito';
 
 interface FiniquitoFormProps {
@@ -7,6 +7,7 @@ interface FiniquitoFormProps {
   onChange: <K extends keyof FiniquitoParams>(field: K, value: FiniquitoParams[K]) => void;
   onCalcular: () => void;
   onCargarEjemplo?: (tipo: 'despido' | 'renuncia' | 'mora') => void;
+  onLimpiar?: () => void;
 }
 
 export const FiniquitoForm: React.FC<FiniquitoFormProps> = ({
@@ -14,6 +15,7 @@ export const FiniquitoForm: React.FC<FiniquitoFormProps> = ({
   onChange,
   onCalcular,
   onCargarEjemplo,
+  onLimpiar,
 }) => {
   const setHoyRetiro = () => {
     const hoy = new Date().toISOString().split('T')[0];
@@ -32,35 +34,49 @@ export const FiniquitoForm: React.FC<FiniquitoFormProps> = ({
           </p>
         </div>
 
-        {onCargarEjemplo && (
-          <div className="flex items-center gap-1.5 self-start sm:self-auto">
-            <span className="text-[10px] text-slate-400 dark:text-slate-500 hidden sm:inline">Ejemplos:</span>
+        <div className="flex flex-wrap items-center gap-1.5 self-start sm:self-auto">
+          {onLimpiar && (
             <button
               type="button"
-              onClick={() => onCargarEjemplo('despido')}
-              className="text-[10px] px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition"
-              title="Cargar caso de despido forzoso con desahucio"
+              onClick={onLimpiar}
+              className="text-[10px] px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition flex items-center gap-1"
+              title="Limpiar todos los campos del formulario"
             >
-              Despido
+              <RotateCcw className="w-2.5 h-2.5" />
+              <span>Limpiar</span>
             </button>
-            <button
-              type="button"
-              onClick={() => onCargarEjemplo('renuncia')}
-              className="text-[10px] px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition"
-              title="Cargar caso de renuncia voluntaria con quinquenio previo"
-            >
-              Renuncia
-            </button>
-            <button
-              type="button"
-              onClick={() => onCargarEjemplo('mora')}
-              className="text-[10px] px-2 py-0.5 rounded bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-300 border border-rose-200 dark:border-rose-900/50 hover:bg-rose-100 transition"
-              title="Cargar caso con mora patronal mayor a 15 días"
-            >
-              Mora 30%
-            </button>
-          </div>
-        )}
+          )}
+
+          {onCargarEjemplo && (
+            <>
+              <span className="text-[10px] text-slate-400 dark:text-slate-500 hidden sm:inline ml-1">Ejemplos:</span>
+              <button
+                type="button"
+                onClick={() => onCargarEjemplo('despido')}
+                className="text-[10px] px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition"
+                title="Cargar ejemplo con despido forzoso y 3 meses de desahucio"
+              >
+                Despido
+              </button>
+              <button
+                type="button"
+                onClick={() => onCargarEjemplo('renuncia')}
+                className="text-[10px] px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition"
+                title="Cargar ejemplo de renuncia voluntaria con quinquenio cancelado"
+              >
+                Renuncia
+              </button>
+              <button
+                type="button"
+                onClick={() => onCargarEjemplo('mora')}
+                className="text-[10px] px-2 py-0.5 rounded bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-300 border border-rose-200 dark:border-rose-900/50 hover:bg-rose-100 transition"
+                title="Cargar ejemplo con plazo vencido mayor a 15 días (multa 30%)"
+              >
+                Mora 30%
+              </button>
+            </>
+          )}
+        </div>
       </div>
 
       <form
@@ -84,7 +100,7 @@ export const FiniquitoForm: React.FC<FiniquitoFormProps> = ({
                 id="nombreTrabajador"
                 value={params.nombreTrabajador}
                 onChange={(e) => onChange('nombreTrabajador', e.target.value)}
-                placeholder="Ej: Edgar Mercado Garcia"
+                placeholder="Ej: Juan Carlos Pérez Mamani"
                 className="w-full px-2.5 py-1.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-1 focus:ring-blue-500 outline-none transition-colors"
               />
             </div>
@@ -95,7 +111,7 @@ export const FiniquitoForm: React.FC<FiniquitoFormProps> = ({
                 id="ciTrabajador"
                 value={params.ciTrabajador}
                 onChange={(e) => onChange('ciTrabajador', e.target.value)}
-                placeholder="Ej: 4543848"
+                placeholder="Ej: 4543848 LP"
                 className="w-full px-2.5 py-1.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-1 focus:ring-blue-500 outline-none transition-colors"
               />
             </div>
@@ -140,6 +156,7 @@ export const FiniquitoForm: React.FC<FiniquitoFormProps> = ({
                 id="fechaIngreso"
                 value={params.fechaIngreso}
                 onChange={(e) => onChange('fechaIngreso', e.target.value)}
+                placeholder="dd/mm/aaaa"
                 className="w-full px-2.5 py-1.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-1 focus:ring-blue-500 outline-none font-mono"
               />
             </div>
@@ -150,6 +167,7 @@ export const FiniquitoForm: React.FC<FiniquitoFormProps> = ({
                   type="button"
                   onClick={setHoyRetiro}
                   className="text-[10px] text-blue-600 dark:text-blue-400 hover:underline"
+                  title="Fijar con fecha actual de hoy"
                 >
                   Hoy
                 </button>
@@ -188,7 +206,7 @@ export const FiniquitoForm: React.FC<FiniquitoFormProps> = ({
                 max="8"
                 value={params.quinquenios === 0 ? '' : params.quinquenios}
                 onChange={(e) => onChange('quinquenios', parseInt(e.target.value) || 0)}
-                placeholder="0"
+                placeholder="Ej: 0 (o número pagado)"
                 className="w-full px-2.5 py-1.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-1 focus:ring-blue-500 outline-none font-mono"
               />
             </div>
@@ -209,7 +227,7 @@ export const FiniquitoForm: React.FC<FiniquitoFormProps> = ({
                 id="sueldo1"
                 value={params.sueldo1 === 0 ? '' : params.sueldo1}
                 onChange={(e) => onChange('sueldo1', parseFloat(e.target.value) || 0)}
-                placeholder="0.00"
+                placeholder="Ej: 8500.00"
                 className="w-full px-2 py-1.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-1 focus:ring-blue-500 outline-none font-mono"
               />
             </div>
@@ -221,7 +239,7 @@ export const FiniquitoForm: React.FC<FiniquitoFormProps> = ({
                 id="sueldo2"
                 value={params.sueldo2 === 0 ? '' : params.sueldo2}
                 onChange={(e) => onChange('sueldo2', parseFloat(e.target.value) || 0)}
-                placeholder="0.00"
+                placeholder="Ej: 8500.00"
                 className="w-full px-2 py-1.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-1 focus:ring-blue-500 outline-none font-mono"
               />
             </div>
@@ -233,7 +251,7 @@ export const FiniquitoForm: React.FC<FiniquitoFormProps> = ({
                 id="sueldo3"
                 value={params.sueldo3 === 0 ? '' : params.sueldo3}
                 onChange={(e) => onChange('sueldo3', parseFloat(e.target.value) || 0)}
-                placeholder="0.00"
+                placeholder="Ej: 8800.00"
                 className="w-full px-2 py-1.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-1 focus:ring-blue-500 outline-none font-mono"
               />
             </div>
@@ -254,7 +272,7 @@ export const FiniquitoForm: React.FC<FiniquitoFormProps> = ({
                 id="vacConsolidadas"
                 value={params.vacConsolidadas === 0 ? '' : params.vacConsolidadas}
                 onChange={(e) => onChange('vacConsolidadas', parseFloat(e.target.value) || 0)}
-                placeholder="0.00"
+                placeholder="Ej: 5.00 (saldo acumulado)"
                 className="w-full px-2.5 py-1.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-1 focus:ring-blue-500 outline-none font-mono"
               />
             </div>
@@ -266,7 +284,7 @@ export const FiniquitoForm: React.FC<FiniquitoFormProps> = ({
                 id="vacDuodecimas"
                 value={params.vacDuodecimas === 0 ? '' : params.vacDuodecimas}
                 onChange={(e) => onChange('vacDuodecimas', parseFloat(e.target.value) || 0)}
-                placeholder="0.00"
+                placeholder="Ej: 2.50 (duodécima fracción)"
                 className="w-full px-2.5 py-1.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-1 focus:ring-blue-500 outline-none font-mono"
               />
             </div>
@@ -282,7 +300,7 @@ export const FiniquitoForm: React.FC<FiniquitoFormProps> = ({
                 id="diasMesRetiro"
                 value={params.diasMesRetiro === 0 ? '' : params.diasMesRetiro}
                 onChange={(e) => onChange('diasMesRetiro', parseInt(e.target.value) || 0)}
-                placeholder="0"
+                placeholder="Ej: 15 (días del mes)"
                 className="w-full px-2.5 py-1.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-1 focus:ring-blue-500 outline-none font-mono"
               />
             </div>
@@ -294,7 +312,7 @@ export const FiniquitoForm: React.FC<FiniquitoFormProps> = ({
                 id="otrosDescuentos"
                 value={params.otrosDescuentos === 0 ? '' : params.otrosDescuentos}
                 onChange={(e) => onChange('otrosDescuentos', parseFloat(e.target.value) || 0)}
-                placeholder="0.00"
+                placeholder="Ej: 0.00 (anticipos/préstamos)"
                 className="w-full px-2.5 py-1.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-1 focus:ring-blue-500 outline-none font-mono"
               />
             </div>
@@ -316,7 +334,7 @@ export const FiniquitoForm: React.FC<FiniquitoFormProps> = ({
               id="saldoRcIva"
               value={params.saldoRcIva === 0 ? '' : params.saldoRcIva}
               onChange={(e) => onChange('saldoRcIva', parseFloat(e.target.value) || 0)}
-              placeholder="0.00"
+              placeholder="Ej: 250.00 (saldo F-110 a favor)"
               className="w-full px-2.5 py-1.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-1 focus:ring-blue-500 outline-none font-mono"
             />
             <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">

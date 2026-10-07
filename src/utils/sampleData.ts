@@ -1,8 +1,36 @@
 import { FiniquitoParams } from '../types/finiquito';
 
-export const INITIAL_FINIQUITO_PARAMS: FiniquitoParams = {
+/**
+ * Estado inicial limpio: todos los campos vacíos con guías y placeholders
+ */
+export const EMPTY_FINIQUITO_PARAMS: FiniquitoParams = {
+  nombreTrabajador: '',
+  ciTrabajador: '',
+  cargoTrabajador: '',
+  razonSocial: '',
+
+  fechaIngreso: '',
+  fechaRetiro: new Date().toISOString().split('T')[0], // Fecha actual por defecto
+  motivoRetiro: 'despido',
+  quinquenios: 0,
+
+  sueldo1: 0,
+  sueldo2: 0,
+  sueldo3: 0,
+
+  vacConsolidadas: 0,
+  vacDuodecimas: 0,
+  diasMesRetiro: 0,
+  otrosDescuentos: 0,
+
+  saldoRcIva: 0,
+};
+
+export const INITIAL_FINIQUITO_PARAMS: FiniquitoParams = EMPTY_FINIQUITO_PARAMS;
+
+export const CASO_DESPIDO_INTEMPESTIVO: FiniquitoParams = {
   nombreTrabajador: 'Edgar Mercado Garcia',
-  ciTrabajador: '4543848',
+  ciTrabajador: '4543848 LP',
   cargoTrabajador: 'Coordinador de Desarrollo',
   razonSocial: 'PROMEDICAL S.A.',
 
@@ -53,8 +81,7 @@ export const CASO_MORA_DS28699: FiniquitoParams = {
   razonSocial: 'CONSTRUCTORA DEL VALLE S.R.L.',
 
   fechaIngreso: '2022-01-10',
-  // Retiro hace más de 15 días para demostrar la multa del 30%
-  fechaRetiro: '2026-08-01',
+  fechaRetiro: '2026-08-01', // Retiro con más de 15 días transcurridos
   motivoRetiro: 'despido',
   quinquenios: 0,
 

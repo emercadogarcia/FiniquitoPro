@@ -1,11 +1,12 @@
 import React from 'react';
-import { Sun, Moon, Scale, BookOpen } from 'lucide-react';
+import { Sun, Moon, BookOpen, HelpCircle } from 'lucide-react';
 
 interface NavbarProps {
   theme: 'light' | 'dark';
   onToggleTheme: () => void;
   mostrarLeyes: boolean;
   onToggleLeyes: () => void;
+  onOpenManual: () => void;
   onOpenLegalCompendio?: () => void;
 }
 
@@ -14,14 +15,15 @@ export const Navbar: React.FC<NavbarProps> = ({
   onToggleTheme,
   mostrarLeyes,
   onToggleLeyes,
+  onOpenManual,
   onOpenLegalCompendio,
 }) => {
   return (
     <header className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-40 transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        {/* Brand Lockup */}
+        {/* Brand Lockup - Matching image.png */}
         <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-sm shadow-sm">
+          <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-sm shadow-sm select-none shrink-0">
             3M
           </div>
           <div>
@@ -35,18 +37,18 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
 
         {/* Action Controls */}
-        <div className="flex items-center space-x-3 sm:space-x-4">
-          {/* Guía Legal Modal Button (opcional) */}
-          {onOpenLegalCompendio && (
-            <button
-              onClick={onOpenLegalCompendio}
-              title="Ver compendio de normativas laborales bolivianas"
-              className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
-            >
-              <BookOpen className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-              <span>Compendio Legal</span>
-            </button>
-          )}
+        <div className="flex items-center space-x-2 sm:space-x-3">
+          {/* Botón Manual Paso a Paso */}
+          <button
+            type="button"
+            onClick={onOpenManual}
+            title="Abrir Manual de Usuario Paso a Paso (Descargable en Markdown)"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-900/60 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors shadow-2xs"
+          >
+            <BookOpen className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+            <span className="hidden sm:inline">Manual Paso a Paso</span>
+            <span className="sm:hidden">Manual</span>
+          </button>
 
           {/* Switch de Referencias Legales */}
           <label className="flex items-center cursor-pointer select-none text-xs text-slate-600 dark:text-slate-300 space-x-2 bg-slate-50 dark:bg-slate-800/80 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 transition-colors">
@@ -68,8 +70,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                 }`}
               />
             </div>
-            <span className="font-medium text-[11px] text-slate-700 dark:text-slate-200 whitespace-nowrap">
+            <span className="font-medium text-[11px] text-slate-700 dark:text-slate-200 whitespace-nowrap hidden sm:inline">
               Mostrar Base Legal
+            </span>
+            <span className="font-medium text-[11px] text-slate-700 dark:text-slate-200 whitespace-nowrap sm:hidden">
+              Leyes
             </span>
           </label>
 

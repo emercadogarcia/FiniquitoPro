@@ -108,11 +108,15 @@ export const HojaFiniquito: React.FC<HojaFiniquitoProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1">
             <div>
               <span className="text-slate-500 dark:text-slate-400">EMPRESA:</span>{' '}
-              <span className="font-semibold text-slate-900 dark:text-white">{params.razonSocial || '-'}</span>
+              <span className="font-semibold text-slate-900 dark:text-white">
+                {params.razonSocial || <span className="text-slate-400 italic">[Nombre de la Empresa]</span>}
+              </span>
             </div>
             <div>
               <span className="text-slate-500 dark:text-slate-400">TRABAJADOR:</span>{' '}
-              <span className="font-semibold text-slate-900 dark:text-white">{params.nombreTrabajador || '-'}</span>
+              <span className="font-semibold text-slate-900 dark:text-white">
+                {params.nombreTrabajador || <span className="text-slate-400 italic">[Nombre del Trabajador]</span>}
+              </span>
             </div>
             <div>
               <span className="text-slate-500 dark:text-slate-400">CARGO:</span>{' '}
@@ -347,12 +351,16 @@ export const HojaFiniquito: React.FC<HojaFiniquitoProps> = ({
         <div className="grid grid-cols-2 gap-8 text-center pt-6 border-t border-slate-200 dark:border-slate-800 text-[9px] text-slate-500 dark:text-slate-400">
           <div>
             <div className="border-b border-slate-300 dark:border-slate-700 w-4/5 mx-auto mb-1"></div>
-            <p className="font-semibold text-slate-700 dark:text-slate-200">{params.nombreTrabajador || 'TRABAJADOR'}</p>
+            <p className="font-semibold text-slate-700 dark:text-slate-200">
+              {params.nombreTrabajador || 'TRABAJADOR'}
+            </p>
             <p>C.I. <span>{params.ciTrabajador || '-'}</span></p>
           </div>
           <div>
             <div className="border-b border-slate-300 dark:border-slate-700 w-4/5 mx-auto mb-1"></div>
-            <p className="font-semibold text-slate-700 dark:text-slate-200">{params.razonSocial || 'EMPLEADOR'}</p>
+            <p className="font-semibold text-slate-700 dark:text-slate-200">
+              {params.razonSocial || 'EMPLEADOR'}
+            </p>
             <p>FIRMA Y SELLO PATRONAL</p>
           </div>
         </div>

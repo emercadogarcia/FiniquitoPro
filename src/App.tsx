@@ -4,7 +4,8 @@ import { calcularFiniquito } from './utils/calculator';
 import { generarFiniquitoMarkdown } from './utils/markdownGenerator';
 import { generarFiniquitoPDF } from './utils/pdfGenerator';
 import { 
-  INITIAL_FINIQUITO_PARAMS, 
+  EMPTY_FINIQUITO_PARAMS, 
+  CASO_DESPIDO_INTEMPESTIVO, 
   CASO_RETIRO_VOLUNTARIO, 
   CASO_MORA_DS28699 
 } from './utils/sampleData';
@@ -13,6 +14,7 @@ import { Navbar } from './components/Navbar';
 import { FiniquitoForm } from './components/FiniquitoForm';
 import { HojaFiniquito } from './components/HojaFiniquito';
 import { ModalWhatsApp } from './components/ModalWhatsApp';
+import { ManualModal } from './components/ManualModal';
 import { LegalGuideModal } from './components/LegalGuideModal';
 import { WhatsAppFloatingButton } from './components/WhatsAppFloatingButton';
 import { Footer } from './components/Footer';
@@ -45,11 +47,12 @@ export default function App() {
   const [mostrarLeyes, setMostrarLeyes] = useState(false);
   const toggleLeyes = () => setMostrarLeyes((prev) => !prev);
 
-  // 3. Estado de Parámetros del Finiquito
-  const [params, setParams] = useState<FiniquitoParams>(INITIAL_FINIQUITO_PARAMS);
+  // 3. Estado de Parámetros del Finiquito (inicia limpio y vacío con placeholders de guía)
+  const [params, setParams] = useState<FiniquitoParams>(EMPTY_FINIQUITO_PARAMS);
 
   // 4. Modales y Notificaciones
   const [isWhatsAppModalOpen, setIsWhatsAppModalOpen] = useState(false);
+  const [isManualModalOpen, setIsManualModalOpen] = useState(false);
   const [isLegalModalOpen, setIsLegalModalOpen] = useState(false);
   const [copiado, setCopiado] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -76,17 +79,23 @@ export default function App() {
     }));
   };
 
+  // Limpiar formulario
+  const handleLimpiar = () => {
+    setParams(EMPTY_FINIQUITO_PARAMS);
+    showToast('Formulario vaciado. Ingrese los datos de su caso.');
+  };
+
   // Cargar presets de ejemplo
   const handleCargarEjemplo = (tipo: 'despido' | 'renuncia' | 'mora') => {
     if (tipo === 'despido') {
-      setParams(INITIAL_FINIQUITO_PARAMS);
-      showToast('Cargado caso: Despido Forzoso (con Desahucio)');
+      setParams(CASO_DESPIDO_INTEMPESTIVO);
+      showToast('Cargado ejemplo: Despido Forzoso (con Desahucio)');
     } else if (tipo === 'renuncia') {
       setParams(CASO_RETIRO_VOLUNTARIO);
-      showToast('Cargado caso: Retiro Voluntario (con Quinquenio previo)');
+      showToast('Cargado ejemplo: Retiro Voluntario (con Quinquenio previo)');
     } else if (tipo === 'mora') {
       setParams(CASO_MORA_DS28699);
-      showToast('Cargado caso: Mora D.S. 28699 (Multa 30% patronal)');
+      showToast('Cargado ejemplo: Mora D.S. 28699 (Multa 30% patronal)');
     }
   };
 
@@ -139,12 +148,13 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col justify-between bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors duration-200">
-      {/* Header Minimalista con Switch de Leyes y Tema */}
+      {/* Header Minimalista con Switch de Leyes, Manual y Tema */}
       <Navbar
         theme={theme}
         onToggleTheme={toggleTheme}
         mostrarLeyes={mostrarLeyes}
         onToggleLeyes={toggleLeyes}
+        onOpenManual={() => setIsManualModalOpen(true)}
         onOpenLegalCompendio={() => setIsLegalModalOpen(true)}
       />
 
@@ -160,6 +170,7 @@ export default function App() {
                 showToast('Finiquito recalculado conforme a ley');
               }}
               onCargarEjemplo={handleCargarEjemplo}
+              onLimpiar={handleLimpiar}
             />
           </div>
 
@@ -188,7 +199,13 @@ export default function App() {
         mostrarLeyes={mostrarLeyes}
       />
 
-      {/* Modal Compendio Legal Completo (opcional) */}
+      {/* Modal Manual Paso a Paso (Descargable en Markdown) */}
+      <ManualModal
+        isOpen={isManualModalOpen}
+        onClose={() => setIsManualModalOpen(false)}
+      />
+
+      {/* Modal Compendio Legal Completo */}
       {isLegalModalOpen && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
           <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-3xl w-full max-h-[85vh] overflow-y-auto p-6 border border-slate-200 dark:border-slate-800 shadow-2xl space-y-4">
